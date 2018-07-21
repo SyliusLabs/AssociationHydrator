@@ -74,10 +74,26 @@ final class AssociationHydrator
             ->from($classMetadata->name, 'subject')
             ->leftJoin(sprintf('subject.%s', $finalAssociation), 'associations')
             ->where('subject IN (:subjects)')
-            ->setParameter('subjects', array_unique($subjects, \SORT_REGULAR))
+            ->setParameter('subjects', $this->array_unique($subjects))
             ->getQuery()
             ->getResult()
         ;
+    }
+    
+    /**
+     * @param mixed $subjects
+     *
+     * @return array|mixed[]
+     */
+    private function array_unique(array $subjects): array
+    {
+        $uniqueSubjects = array();
+        foreach($subjects as $curSubject) {
+           $curSubjectClass = $this->entityManager->getClassMetadata(get_class($curSubject))->name;
+           $curSubjectId = $this->entityManager->getUnitOfWork()->getEntityIdentifier($curSubject);
+           $uniqueSubjects[$curSubjectClass.'___'.implode('__', $curSubjectId)] = $curSubject;
+        }
+        return array_values($uniqueSubjects);
     }
 
     /**
