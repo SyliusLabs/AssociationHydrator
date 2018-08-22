@@ -68,6 +68,8 @@ final class AssociationHydrator
             $classMetadata = $this->entityManager->getClassMetadata($classMetadata->getAssociationTargetClass($initialAssociation));
         }
 
+        $subjects = array_map([$this->entityManager->getUnitOfWork(), 'getEntityIdentifier'], $subjects);
+
         $this->entityManager->createQueryBuilder()
             ->select('PARTIAL subject.{id}')
             ->addSelect('associations')
