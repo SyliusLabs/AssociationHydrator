@@ -45,13 +45,12 @@ final class AssociationHydrator
      */
     public function hydrateAssociation($subjects, string $associationPath): void
     {
-        if (null === $subjects || [] === $subjects) {
+        if ([] === $subjects = $this->normalizeSubject($subjects)) {
             return;
         }
 
         $initialAssociations = explode('.', $associationPath);
         $finalAssociation = array_pop($initialAssociations);
-        $subjects = $this->normalizeSubject($subjects);
 
         $classMetadata = $this->classMetadata;
         foreach ($initialAssociations as $initialAssociation) {
@@ -90,13 +89,13 @@ final class AssociationHydrator
     private function normalizeSubject($subject): array
     {
         if ($subject instanceof Collection) {
-            return $subject->toArray();
+            $subject = $subject->toArray();
         }
 
         if (!is_array($subject)) {
-            return [$subject];
+            $subject = [$subject];
         }
 
-        return $subject;
+        return \array_filter($subject);
     }
 }
