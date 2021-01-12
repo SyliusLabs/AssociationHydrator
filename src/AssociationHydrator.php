@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SyliusLabs\AssociationHydrator;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
