@@ -12,22 +12,13 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 final class AssociationHydrator
 {
-    /** @var EntityManagerInterface */
-    private $entityManager;
-
-    /** @var ClassMetadata */
-    private $classMetadata;
-
-    /** @var PropertyAccessor */
-    private $propertyAccessor;
+    private PropertyAccessor $propertyAccessor;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
-        ClassMetadata $classMetadata,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly ClassMetadata $classMetadata,
         ?PropertyAccessor $propertyAccessor = null
     ) {
-        $this->entityManager = $entityManager;
-        $this->classMetadata = $classMetadata;
         $this->propertyAccessor = $propertyAccessor ?? PropertyAccess::createPropertyAccessor();
     }
 
@@ -44,7 +35,6 @@ final class AssociationHydrator
 
     /**
      * @param mixed $subjects
-     * @param string $associationPath
      */
     public function hydrateAssociation($subjects, string $associationPath): void
     {
@@ -86,8 +76,6 @@ final class AssociationHydrator
 
     /**
      * @param mixed $subject
-     *
-     * @return array|mixed[]
      */
     private function normalizeSubject($subject): array
     {
