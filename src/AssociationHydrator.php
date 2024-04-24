@@ -12,10 +12,12 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 final class AssociationHydrator
 {
+    private PropertyAccessor $propertyAccessor;
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly ClassMetadata $classMetadata,
-        private ?PropertyAccessor $propertyAccessor = null
+        ?PropertyAccessor $propertyAccessor = null
     ) {
         $this->propertyAccessor = $propertyAccessor ?? PropertyAccess::createPropertyAccessor();
     }
