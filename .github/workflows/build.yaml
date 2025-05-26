@@ -14,7 +14,7 @@ jobs:
     tests:
         runs-on: ubuntu-latest
 
-        name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}"
+        name: "PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}, ORM ${{ matrix.orm }}"
 
         strategy:
             fail-fast: false
@@ -25,10 +25,14 @@ jobs:
                 exclude:
                     - php: 8.1
                       symfony: 7.0.*
+                    - php: 8.1
+                      symfony: 7.1.*
+                    - php: 8.1
+                      symfony: 7.2.*
 
         steps:
             -
-                uses: actions/checkout@v2
+                uses: actions/checkout@v4
 
             -
                 name: Setup PHP
@@ -42,11 +46,11 @@ jobs:
             -
                 name: Get Composer cache directory
                 id: composer-cache
-                run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+                run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             -
                 name: Cache Composer
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json **/composer.lock') }}
